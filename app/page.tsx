@@ -3,6 +3,7 @@ import RevealOnScroll from './components/RevealOnScroll'
 import ThreeScene from './components/ThreeScene'
 import ContactForm from './components/ContactForm'
 import TiltCard from './components/TiltCard'
+import CatchMySkillsGame from './components/CatchMySkillsGame'
 
 export const dynamic = 'force-dynamic'
 
@@ -41,6 +42,9 @@ export default async function Home() {
             </a>
             <a href="#contact" className="rounded-full border border-black/10 dark:border-white/15 px-5 py-3 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10">
               Contact Me
+            </a>
+            <a href="#game" className="rounded-full border border-black/10 dark:border-white/15 px-5 py-3 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10">
+              Play Game
             </a>
           </div>
           <div className="mt-6 flex flex-wrap gap-3 text-xs text-foreground/70">
@@ -87,6 +91,17 @@ export default async function Home() {
             ))}
           </ul>
         )}
+      </section>
+
+      {/* Game */}
+      <section id="game" className="mx-auto max-w-6xl w-full px-4 mt-20">
+        <RevealOnScroll className="mb-6">
+          <h2 className="text-3xl sm:text-4xl font-semibold">Catch My Skills</h2>
+        </RevealOnScroll>
+        <CatchMySkillsGame
+          className="max-w-3xl mx-auto"
+          skills={skills.map((s: Skill) => s.name)}
+        />
       </section>
 
       {/* Skills */}
