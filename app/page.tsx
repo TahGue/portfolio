@@ -136,11 +136,54 @@ export default async function Home() {
       {/* About */}
       <section id="about" className="mx-auto max-w-6xl w-full px-4 mt-20">
         <RevealOnScroll>
-          <h2 className="text-3xl sm:text-4xl font-semibold mb-3">About</h2>
-          <p className="text-foreground/80 max-w-3xl">
-            I’m building a modern, interactive portfolio with Next.js, Tailwind, and Prisma.
-            This space will include a short bio, highlights of experience, and a timeline.
-          </p>
+          <h2 className="text-3xl sm:text-4xl font-semibold mb-6">About Me</h2>
+          <div className="prose prose-lg max-w-none text-foreground/80 space-y-4">
+            <p>
+              I am a passionate and versatile technology enthusiast with a strong background in software development, networking, and AI. Over the years, I’ve built expertise across different fields—from back-end and full-stack development to network administration and industrial techniques. Recently, I have been focusing on Machine Learning and Deep Learning, exploring how AI can be applied to real-world problems and business solutions.
+            </p>
+            <p>
+              My journey includes hands-on experience in web development, system administration, and electronics, as well as practical roles in industries such as automotive, manufacturing, and freelancing projects. With a curiosity-driven mindset, I enjoy solving problems, building applications, and continuously learning new technologies.
+            </p>
+            <h3 className="text-2xl font-semibold mt-8 mb-4">🛠 Skills</h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 className="font-semibold text-lg mb-2">Programming & Development:</h4>
+                <ul className="list-disc list-inside space-y-1 text-sm">
+                  <li>Java, JavaScript, TypeScript, React, Vue.js, Node.js</li>
+                  <li>Databases: SQL, PostgreSQL</li>
+                  <li>Full-stack development, APIs, WebSockets</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-lg mb-2">Artificial Intelligence & Data:</h4>
+                <ul className="list-disc list-inside space-y-1 text-sm">
+                  <li>Machine Learning (ML)</li>
+                  <li>Deep Learning (DL)</li>
+                  <li>AI integration with APIs</li>
+                  <li>Data analysis & model training</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-lg mb-2">Networking & Systems:</h4>
+                <ul className="list-disc list-inside space-y-1 text-sm">
+                  <li>Linux (Red Hat, Ubuntu), Windows OS</li>
+                  <li>Networking, switches, routers, Wi-Fi administration</li>
+                  <li>Server setup and system configuration</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-lg mb-2">Tools & Platforms:</h4>
+                <ul className="list-disc list-inside space-y-1 text-sm">
+                  <li>VS Code, JetBrains, Unity</li>
+                  <li>GitHub, Trello</li>
+                  <li>E-commerce platforms (Stripe integration, checkout systems)</li>
+                  <li>Other Expertise: Industrial techniques (pneumatics, bearings, electronics, logic systems)</li>
+                  <li>Freelancing in AI and web projects</li>
+                  <li>Strong teamwork and problem-solving background</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </RevealOnScroll>
       </section>
 
