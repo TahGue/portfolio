@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio (Next.js 15, Tailwind, Prisma, R3F)
+
+One‑page, AI‑themed portfolio with animated “neural network” background, reveal‑on‑scroll animations, Prisma‑backed data, and accessible, responsive UI.
+
+• Framework: Next.js App Router (15)
+• Styling: Tailwind CSS v4
+• Data: Prisma + SQLite
+• 3D/Motion: React Three Fiber + three, Framer Motion
+
+## Features
+• Single‑page layout with anchored sections: `#home`, `#projects`, `#skills`, `#about`, `#contact`.
+• AI “Neural Network” 3D background (`app/components/ThreeScene.tsx`) that respects reduced motion.
+• Reveal‑on‑scroll animations (`RevealOnScroll`), interactive tilt cards (`TiltCard`).
+• Contact form with API route (`app/api/contact/route.ts`).
+• Prisma models: `Project`, `Skill`, `ContactSubmission`.
+• Sitemap/robots tuned for single‑page.
 
 ## Getting Started
-
-First, run the development server:
-
+1) Install deps
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2) Environment
+Create `portfolio/.env` with SQLite URL (already included if using the dev DB):
+```env
+DATABASE_URL="file:./prisma/dev.db"
+NEXT_PUBLIC_BASE_URL="http://localhost:3000"
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3) Prisma (uses JSON field for `Project.techStack`)
+```bash
+npm run prisma:generate
+npm run prisma:push
+npm run db:seed   # optional demo data
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4) Dev server
+```bash
+npm run dev
+```
+Open http://localhost:3000
 
-## Learn More
+## Scripts
+• `dev` – start Next.js (Turbopack)
+• `build` – build
+• `start` – run production build
+• `lint` – eslint
+• `prisma:generate` – generate Prisma client
+• `prisma:push` – push schema to SQLite
+• `db:seed` – seed demo content
 
-To learn more about Next.js, take a look at the following resources:
+## Data Model (excerpt)
+`prisma/schema.prisma` (SQLite)
+```prisma
+model Project {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  imageUrl    String?
+  techStack   Json     // array of strings stored as JSON
+  link        String?
+  createdAt   DateTime @default(now())
+}
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+model Skill {
+  id           Int     @id @default(autoincrement())
+  name         String
+  proficiency  Int
+  iconUrl      String?
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Customization
+• Tweak AI background density/colors: `NeuralNetwork` props in `ThreeScene.tsx` (`count`, `radius`, `linkDistance`, `colorA`, `colorB`).
+• Update content in `app/page.tsx` (hero, projects/skills rendering).
+• Adjust animations in `RevealOnScroll.tsx` and Tailwind classes in `app/globals.css`.
 
-## Deploy on Vercel
+## Deploy
+Any Next.js 15 compatible host (e.g., Vercel). Ensure Prisma is generated at build time and the SQLite file is deployed (or switch provider).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Accessibility and Performance
+• Respects `prefers-reduced-motion`.
+• Semantic HTML and keyboard‑friendly interactions.
