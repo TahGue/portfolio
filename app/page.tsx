@@ -1,103 +1,143 @@
-import Image from "next/image";
+import { prisma } from '@/lib/prisma'
+import RevealOnScroll from './components/RevealOnScroll'
+import ThreeScene from './components/ThreeScene'
+import ContactForm from './components/ContactForm'
+import TiltCard from './components/TiltCard'
 
-export default function Home() {
+export const dynamic = 'force-dynamic'
+
+export default async function Home() {
+  const [projects, skills] = await Promise.all([
+    prisma.project.findMany({ orderBy: { createdAt: 'desc' } }),
+    prisma.skill.findMany({ orderBy: { proficiency: 'desc' } })
+  ])
+
+  type Project = (typeof projects)[number]
+  type Skill = (typeof skills)[number]
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="relative min-h-screen py-14 sm:py-18">
+      {/* Background effects */}
+      <div className="aurora" aria-hidden />
+      <ThreeScene />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Hero */}
+      <section id="home" className="mx-auto max-w-6xl w-full px-4">
+        <RevealOnScroll>
+          <div className="inline-flex items-center gap-2 rounded-full border border-black/10 dark:border-white/15 px-3 py-1 text-xs mb-3 bg-background/70 backdrop-blur">
+            <span className="i-lucide-sparkles" aria-hidden /> New
+            <span className="opacity-70">Now with 3D + motion</span>
+          </div>
+          <h1 className="text-5xl sm:text-7xl font-semibold tracking-tight leading-tight">
+            Build delightful, performant
+            <span className="block bg-clip-text text-transparent bg-[linear-gradient(90deg,#22d3ee,#a855f7)]">web experiences</span>
+          </h1>
+          <p className="mt-4 text-base sm:text-lg text-foreground/80 max-w-2xl">
+            Full‑stack Next.js with Tailwind, Prisma, and tasteful motion. Accessible, responsive, and production‑ready.
+          </p>
+          <div className="mt-6 flex flex-col sm:flex-row gap-3">
+            <a href="#projects" className="rounded-full bg-foreground text-background px-5 py-3 text-sm font-medium hover:opacity-90">
+              View Projects
+            </a>
+            <a href="#contact" className="rounded-full border border-black/10 dark:border-white/15 px-5 py-3 text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10">
+              Contact Me
+            </a>
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3 text-xs text-foreground/70">
+            <span className="rounded-full border border-black/10 dark:border-white/15 px-3 py-1">Next.js 15</span>
+            <span className="rounded-full border border-black/10 dark:border-white/15 px-3 py-1">Prisma</span>
+            <span className="rounded-full border border-black/10 dark:border-white/15 px-3 py-1">R3F</span>
+            <span className="rounded-full border border-black/10 dark:border-white/15 px-3 py-1">Framer Motion</span>
+          </div>
+        </RevealOnScroll>
+      </section>
+
+      {/* Projects */}
+      <section id="projects" className="mx-auto max-w-6xl w-full px-4 mt-20">
+        <RevealOnScroll className="mb-6">
+          <h2 className="text-3xl sm:text-4xl font-semibold">Projects</h2>
+        </RevealOnScroll>
+        {projects.length === 0 ? (
+          <p className="text-foreground/70">No projects yet.</p>
+        ) : (
+          <ul className="grid gap-6 sm:grid-cols-2">
+            {projects.map((p: Project) => (
+              <RevealOnScroll key={p.id}>
+                <TiltCard className="[transform-style:preserve-3d]">
+                <li className="rounded-xl border border-black/10 dark:border-white/15 p-5 bg-background/60 backdrop-blur shadow-sm hover:shadow-md transition-shadow">
+                  <h3 className="text-xl font-medium">{p.title}</h3>
+                  <p className="mt-2 text-foreground/80 text-sm leading-6">{p.description}</p>
+                  {Array.isArray(p.techStack) && (p.techStack as unknown as string[])?.length ? (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {(p.techStack as unknown as string[]).map((t: string) => (
+                        <span key={t} className="text-xs px-2 py-1 rounded-full bg-black/5 dark:bg-white/10">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+                  {p.link ? (
+                    <a href={p.link} target="_blank" rel="noreferrer" className="mt-4 inline-block text-sm underline underline-offset-4">
+                      Visit →
+                    </a>
+                  ) : null}
+                </li>
+                </TiltCard>
+              </RevealOnScroll>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      {/* Skills */}
+      <section id="skills" className="mx-auto max-w-6xl w-full px-4 mt-20">
+        <RevealOnScroll className="mb-6">
+          <h2 className="text-3xl sm:text-4xl font-semibold">Skills</h2>
+        </RevealOnScroll>
+        {skills.length === 0 ? (
+          <p className="text-foreground/70">No skills yet.</p>
+        ) : (
+          <ul className="grid gap-4">
+            {skills.map((s: Skill) => (
+              <RevealOnScroll key={s.id}>
+                <li className="rounded-lg border border-black/10 dark:border-white/15 p-4">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="font-medium">{s.name}</span>
+                    <span className="text-foreground/70">{s.proficiency}%</span>
+                  </div>
+                  <div className="mt-2 h-2 w-full rounded bg-black/10 dark:bg-white/10 overflow-hidden">
+                    <div
+                      className="h-full bg-foreground/70"
+                      style={{ width: `${s.proficiency}%` }}
+                    />
+                  </div>
+                </li>
+              </RevealOnScroll>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      {/* About */}
+      <section id="about" className="mx-auto max-w-6xl w-full px-4 mt-20">
+        <RevealOnScroll>
+          <h2 className="text-3xl sm:text-4xl font-semibold mb-3">About</h2>
+          <p className="text-foreground/80 max-w-3xl">
+            I’m building a modern, interactive portfolio with Next.js, Tailwind, and Prisma.
+            This space will include a short bio, highlights of experience, and a timeline.
+          </p>
+        </RevealOnScroll>
+      </section>
+
+      {/* Contact */}
+      <section id="contact" className="mx-auto max-w-6xl w-full px-4 mt-20 pb-20">
+        <RevealOnScroll className="mb-6">
+          <h2 className="text-3xl sm:text-4xl font-semibold">Contact</h2>
+        </RevealOnScroll>
+        <div className="mx-auto max-w-2xl">
+          <ContactForm />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
     </div>
-  );
+  )
 }
